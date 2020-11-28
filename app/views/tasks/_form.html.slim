@@ -5,3 +5,28 @@
     = form.text_field :title
   .actions
     = form.submit
+
+javascript:
+  const taskForm = $('form');
+  taskForm.on('submit', () => {
+
+    // create, update 両方のformに対応するためformからaction,methodを取得
+    const url = taskForm.attr('action');
+    const type = taskForm.attr('method');
+
+    // Rails側で処理できるようシリアライズ
+    // serialize()は下記のような文字列を生成する
+    // "authenticity_token=hogeD%3D&task%5Btitle%5D=aaa"
+    const formData = taskForm.serialize();
+
+    $.ajax({
+      url: url,
+      type: type,
+      data: formData
+    }).then()
+      .catch((e) => {
+        // ここでバリデーションエラーを補足してエラーメッセージを描画
+        $('.js-error-message').text(e.responseText);
+      })
+    return false;
+  })
