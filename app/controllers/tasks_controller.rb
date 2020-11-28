@@ -31,6 +31,7 @@ class TasksController < ApplicationController
         format.html { redirect_to @task, notice: 'Task was successfully created.' }
         format.json { render :show, status: :created, location: @task }
       else
+        # バリデーションエラー時には json を返したいので format.json の方を先に書く
         # @task.errors だとハッシュを返して描画しづらいので join している
         format.json { render json: @task.errors.full_messages.join(', '), status: :unprocessable_entity }
         format.html { render :new }
